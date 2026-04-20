@@ -1,93 +1,115 @@
-# 黄小游——AI研学智能体（MVP）
+# 黄小游——AI研学智能体（Python FastAPI MVP）
 
-本项目已实现“教师建活动 → 学生学研游执行 → 证据上传 → 学习档案汇总 → 教师评价”的可运行链路，不是静态演示壳子。
+本版本基于 Python 技术栈实现可运行 MVP，聚焦真实业务闭环：
+**教师建活动 → 学生学研游 → 证据上传入库+落盘 → 学习档案汇总 → 教师评分评语**。
 
-## 技术栈
-- Next.js 14（App Router）+ TypeScript
-- Tailwind CSS + 基础 UI 组件
-- Supabase Auth + Postgres + Storage
-- OpenAI-compatible API（`OPENAI_BASE_URL/KEY/MODEL`）
+## 1. 技术栈
+- Python 3.11+
+- FastAPI
+- SQLAlchemy
+- SQLite
+- Jinja2 + Bootstrap
+- 本地文件上传目录
+- OpenAI 兼容方式接入 DeepSeek API
 
-## 快速开始
-### 1）安装依赖
-```bash
-npm install
+## 2. 项目结构
+```text
+pyapp/
+  main.py
+  config.py
+  database.py
+  models.py
+  services/
+    auth.py
+    ai.py
+    portfolio.py
+  scripts/
+    init_db.py
+    seed_demo.py
+  templates/
+    auth/
+    student/
+    teacher/
+    admin/
+requirements.txt
+.env.example
 ```
 
-### 2）配置环境变量
-复制 `.env.example` 为 `.env.local`：
+## 3. 环境变量
+复制 `.env.example` 为 `.env`：
 ```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
-OPENAI_BASE_URL=
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
+DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
+DEEPSEEK_API_KEY=
+DEEPSEEK_MODEL=deepseek-chat
+DATABASE_URL=sqlite:///./huangxiaoyou.db
+UPLOAD_DIR=./uploads
+SECRET_KEY=replace-with-a-random-secret
 ```
 
-### 3）初始化数据库
-1. 在 Supabase SQL Editor 执行 `database.sql`
-2. 在 Supabase Auth 创建 admin/teacher/student 账号
-3. 用真实 UUID 写入 `profiles`
-4. 执行 `supabase/seed.sql`（将 `<...-uuid>` 替换为真实值）
-
-### 4）启动
+## 4. 安装与启动
 ```bash
-npm run dev
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python -m pyapp.scripts.init_db
+python -m pyapp.scripts.seed_demo
+uvicorn pyapp.main:app --reload
 ```
 
-## MVP 功能清单（真实落库）
+## 5. 演示账号
+- admin / admin123
+- teacher / teacher123
+- student / student123
+
+## 6. 功能清单（已实现）
 ### 学生端
 - 登录
-- 活动列表/详情（真实读取 `activities + activity_members`）
-- 学板块：AI问答 + 保存问题（`ai_conversations`、`question_items`）
-- 研板块：任务查看 + 待验证问题记录
-- 游板块：点位列表、证据数与完成状态（`evidences`、`site_progresses`）
-- 点位学习卡：点位简介、问题链、证据清单（`activity_sites`）
-- 证据上传：图片入 Supabase Storage + 文字入库（`evidences`）
-- 学习档案：由问题/任务/证据/点位完成情况生成（`portfolios + portfolio_items`）
+- 活动列表、活动详情
+- 学板块：AI导学问答 + 保存问题
+- 研板块：任务查看 + 待验证问题保存
+- 游板块点位页：简介、问题链、证据清单、AI问答
+- 上传证据：图片保存到本地目录 + 文字证据入库
+- 学习档案：由问题/任务/证据真实汇总
 
 ### 教师端
 - 创建活动
-- 绑定班级并同步活动成员（`activity_classes` + `activity_members`）
-- 配置点位与任务
+- 编辑活动
+- 配置点位
+- 配置任务
 - 发布活动
-- 查看学生证据、点位完成记录
-- 评价学习档案（评分+评语）
+- 查看学生证据
+- 查看学习档案
+- 评分评语
 
 ### 后台
-- 用户管理页（`profiles`）
-- 学校/班级页（`schools/classes`）
-- 资源模板页（真实 CRUD：`resource_templates`）
+- 用户管理（列表）
+- 班级管理（列表）
+- 活动管理（列表）
 
-## 演示链路（A→D）
-### A 教师建活动
-1. teacher 登录
-2. 创建活动
-3. 添加2个点位
-4. 添加3个任务
-5. 绑定班级并同步成员
-6. 发布活动
+## 7. 数据库表（真实建表）
+- users
+- schools
+- classes
+- activities
+- activity_classes
+- activity_sites
+- tasks
+- activity_members
+- question_items
+- evidences
+- ai_conversations
+- portfolios
+- portfolio_items
 
-### B 学生完成导学
-1. student 登录
-2. 进入活动
-3. AI提问
-4. 保存至少2个问题
+建表代码见 `pyapp/models.py`，初始化脚本见 `pyapp/scripts/init_db.py`。
 
-### C 学生现场学习
-1. 进入点位页
-2. 查看问题链与证据清单
-3. 上传1张图片 + 1条文字
-4. 标记点位完成
+## 8. 自测场景（A/B/C/D）
+- A: 教师登录→新建活动→添加点位/任务→发布
+- B: 学生登录→进入活动→AI提问→保存问题
+- C: 学生点位页→上传图片+文字证据
+- D: 教师查看证据→查看档案→评分评语
 
-### D 教师查看结果
-1. 教师进入学生过程页
-2. 查看证据与点位完成记录
-3. 查看学习档案
-4. 写评语并评分
-
-## 当前简化与扩展位
-- 扫码入口目前支持“模拟扫码链接进入点位页”，二维码生成/扫描器留作下一版本。
-- 录音字段已在数据库支持，前端本版优先图片+文字。
-- AI 为轻量上下文注入，不含复杂 RAG。
+## 9. 当前简化与扩展位
+- 班级绑定到活动（activity_classes）当前已建表，下一步可补全可视化绑定页面。
+- 后台当前为基础版列表管理，可扩展为完整 CRUD。
+- AI 为轻量提示注入版本，未做复杂 RAG。

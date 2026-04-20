@@ -1,0 +1,11 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>研板块</h4>
+<h5>任务</h5>
+<ul>{% for t in tasks %}<li>{{ t.title }} - {{ t.description }}</li>{% endfor %}</ul>
+<form method="post" action="/student/activities/{{ activity_id }}/research/question" class="mb-3">
+  <input class="form-control mb-2" name="content" placeholder="添加待验证问题" />
+  <button class="btn btn-primary">保存问题</button>
+</form>
+<ul>{% for q in questions %}<li>{{ q.content }}</li>{% endfor %}</ul>
+{% endblock %}
