@@ -1,0 +1,14 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>{{ activity.title }}</h4>
+<p>{{ activity.description }}</p>
+<div class="mb-3">
+  <a class="btn btn-outline-primary btn-sm" href="/student/activities/{{ activity.id }}/learn">学</a>
+  <a class="btn btn-outline-primary btn-sm" href="/student/activities/{{ activity.id }}/research">研</a>
+  <a class="btn btn-outline-primary btn-sm" href="/student/activities/{{ activity.id }}/portfolio">学习档案</a>
+</div>
+<h5>点位</h5>
+<ul>
+{% for s in sites %}<li><a href="/student/sites/{{ s.id }}">{{ s.order_index }}. {{ s.name }}</a></li>{% endfor %}
+</ul>
+{% endblock %}

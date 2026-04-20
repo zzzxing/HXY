@@ -1,0 +1,20 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>活动编辑：{{ activity.title }}</h4>
+<form method="post" action="/teacher/activities/{{ activity.id }}/site" class="card card-body mb-2">
+  <h6>添加点位</h6>
+  <input class="form-control mb-2" name="name" placeholder="点位名称" required>
+  <input class="form-control mb-2" name="intro" placeholder="点位简介">
+  <button class="btn btn-primary">添加点位</button>
+</form>
+<form method="post" action="/teacher/activities/{{ activity.id }}/task" class="card card-body mb-2">
+  <h6>添加任务</h6>
+  <select name="phase" class="form-select mb-2"><option value="learn">学</option><option value="research">研</option><option value="visit">游</option></select>
+  <input class="form-control mb-2" name="title" placeholder="任务标题" required>
+  <input class="form-control mb-2" name="description" placeholder="任务说明">
+  <button class="btn btn-primary">添加任务</button>
+</form>
+<form method="post" action="/teacher/activities/{{ activity.id }}/publish" class="mb-2"><button class="btn btn-success">发布活动</button></form>
+<h6>点位</h6><ul>{% for s in sites %}<li>{{ s.order_index }}. {{ s.name }}</li>{% endfor %}</ul>
+<h6>任务</h6><ul>{% for t in tasks %}<li>{{ t.phase }} - {{ t.title }}</li>{% endfor %}</ul>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>教师活动管理</h4>
+<form method="post" action="/teacher/activities" class="card card-body mb-3">
+  <input class="form-control mb-2" name="title" placeholder="活动标题" required />
+  <input class="form-control mb-2" name="theme" placeholder="主题" />
+  <textarea class="form-control mb-2" name="description" placeholder="简介"></textarea>
+  <button class="btn btn-primary">创建活动</button>
+</form>
+<ul>{% for a in activities %}
+<li>{{ a.title }} [{{ a.status }}] <a href="/teacher/activities/{{ a.id }}/edit">编辑</a> <a href="/teacher/activities/{{ a.id }}/students">学生成果</a></li>
+{% endfor %}</ul>
+{% endblock %}
