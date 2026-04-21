@@ -1,112 +1,125 @@
-# 黄小游 V2（Python FastAPI 数字研学平台）
+# 黄小游 V3（统一版）
 
-> 当前主版本：**V2 Python 课堂版**（虚拟地图 + 探索点位 + 任务 + 背包 + 成就 + 教师驾驶舱）
+> 当前唯一主运行方案：**Next.js 前端（legacy/next_v1）**。
+>
+> 从本版本开始，不再把 Python FastAPI 当作主前端启动入口。
 
-## 1. V2 新增亮点
-- 学生端 5 主入口：**首页 / 地图 / 任务 / 背包 / 我的**
-- 点位探索页重构：场景区、热点探索、AI导游、AI探究教练、问题链、证据清单、上传证据
-- 身份任务 Quest：小记者 / 城市观察员 / 工业遗产解码员
-- 成就徽章：首次提问、首次证据上传、证据达人、连续探索、最佳观察者
-- 教师驾驶舱：参与人数、证据总数、高频问题、待点评档案、精选展示
-- 教师精选展示：把优秀证据置顶给全班展示
+---
 
-## 2. 目录（已收敛）
+## 1. 先说结论（零基础看这里）
+
+- 你现在只需要启动 **Next.js**。
+- 目录：`legacy/next_v1`
+- 访问地址：`http://localhost:3000`
+- 根目录已提供 Windows 一键脚本：
+  - `start_v3_first_time.bat`（首次安装 + 启动）
+  - `start_v3.bat`（以后日常启动）
+
+---
+
+## 2. 版本收口说明
+
+### V3 主路线（唯一）
+
+- **主前端：Next.js（App Router）**
+- 学生端、教师端、管理端统一由 Next.js 承载。
+
+### Python 代码的角色
+
+- `pyapp/` 目前是历史阶段的 Python 实现与参考代码。
+- **不作为 V3 主启动入口**。
+- 仅在你后续需要迁移接口逻辑时参考，不影响 V3 正常启动。
+
+---
+
+## 3. 启动收口（Windows 一键）
+
+> 要求：已安装 Node.js 18+（推荐 20 LTS）。
+
+### 3.1 首次启动（第一次用这台电脑）
+
+双击运行：
+
 ```text
-pyapp/                 # Python 主应用（V2）
-  main.py
-  models.py
-  services/
-  scripts/
-  templates/
-  static/
-legacy/next_v1/        # 历史 Next/Supabase 代码（已收纳）
-requirements.txt
-.env.example
-README.md
+start_v3_first_time.bat
 ```
 
-## 3. 环境变量
-复制 `.env.example` 为 `.env`：
-```env
-DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
-DEEPSEEK_API_KEY=
-DEEPSEEK_MODEL=deepseek-chat
-DATABASE_URL=sqlite:///./huangxiaoyou.db
-UPLOAD_DIR=./uploads
-SECRET_KEY=replace-with-a-random-secret
+这个脚本会自动做：
+1. 检查 Node/npm
+2. 自动复制环境变量模板（如果没有 `.env.local`）
+3. 自动安装依赖 `npm install`
+4. 自动执行 `npm run dev`
+
+### 3.2 以后日常启动
+
+双击运行：
+
+```text
+start_v3.bat
 ```
 
-## 4. 首次运行（Windows PowerShell）
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python -m pyapp.scripts.preflight
-python -m pyapp.scripts.init_db
-python -m pyapp.scripts.seed_demo
-uvicorn pyapp.main:app --reload
-```
-访问：`http://127.0.0.1:8000`
+这个脚本会直接进入 Next.js 目录并启动开发服务。
 
-演示账号：
-- admin / admin123
-- teacher / teacher123
-- student / student123
+---
 
-## 5. 日常启动（Windows PowerShell）
-```powershell
-.\.venv\Scripts\Activate.ps1
-python -m pyapp.scripts.preflight
-uvicorn pyapp.main:app --reload
-```
+## 4. 环境变量（Next.js）
 
-## 6. 推荐演示路径（V2）
-### 路径 A：学生探索流程
-1. 学生登录 → 首页
-2. 进入地图页 → 点位探索页
-3. 分别使用 AI 导游 / AI 探究教练
-4. 上传 1 张图片 + 1 条文字证据
-5. 打开背包页查看证据与卡片
-6. 打开“我的”查看徽章与档案
+在 `legacy/next_v1` 目录中使用 `.env.local`。
 
-### 路径 B：任务驱动流程
-1. 进入任务页
-2. 选择身份任务
-3. 标记完成任务
-4. 查看徽章变化
+如果不存在，首次脚本会根据 `.env.local.example` 自动生成。
 
-### 路径 C：教师课堂流程
-1. 教师登录 → 驾驶舱
-2. 查看参与人数、证据数、高频问题
-3. 进入学情页
-4. 将 1 条证据设为精选展示
-5. 评分并写评语
+必填（Supabase）：
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
-## 7. 启动保障（自动化）
-- 自动检查依赖（含 itsdangerous）
-- 自动创建目录：`pyapp/static`、`pyapp/templates`、`UPLOAD_DIR`
-- 自动确保数据库表存在（幂等）
-- 预检命令：
-```powershell
-python -m pyapp.scripts.preflight
-```
+AI（可选）：
+- `OPENAI_BASE_URL`（默认可不填）
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
 
-## 8. 常见问题
-### 报错：No module named 'itsdangerous'
-执行：
-```powershell
-pip install -r requirements.txt
+---
+
+## 5. AI Key 没配能不能运行？
+
+**能运行。**
+
+- 不配置 `OPENAI_API_KEY` 时，页面仍可访问，主流程可演示。
+- AI 对话相关能力会返回降级提示，不会阻塞基础教学流程。
+
+---
+
+## 6. 学生端 UI 验收标准（V3）
+
+当前迭代按照“课堂云游前台”标准推进，学生端必须覆盖并持续强化以下页面体验：
+
+1. 首页（课堂引导与任务入口）
+2. 路线/地图页（云游路径与场景导航）
+3. 点位探索页（沉浸式内容 + 提问/证据）
+4. 证据背包页（学习证据聚合）
+5. 学习档案页（过程与成果展示）
+
+> 说明：教师端允许后台风格；学生端不再按“管理系统白卡列表”方向交付。
+
+---
+
+## 7. 手动启动（可选）
+
+如果你不想双击脚本，也可以手动执行：
+
+```bash
+cd legacy/next_v1
+cp .env.local.example .env.local   # Windows 下可手动复制文件
+npm install
+npm run dev
 ```
 
-### 报错：Directory 'pyapp/static' does not exist
-先执行：
-```powershell
-python -m pyapp.scripts.preflight
-```
+---
 
+## 8. 当前版本到底怎么启动（最终答案）
 
-## 9. DeepSeek 配置与降级说明（已处理）
-- **不配置 `DEEPSEEK_API_KEY` 也可以正常启动与使用平台**。
-- 此时 AI 导游/AI 教练会返回友好提示，不会导致页面 500。
-- 若 DeepSeek 网络波动或请求失败，页面会显示“AI 服务暂时不可用，请稍后重试”，并继续允许学生完成任务和证据记录。
-
+- **前端主路线：Next.js（`legacy/next_v1`）**
+- **推荐启动方式：根目录一键脚本**
+  - 首次：`start_v3_first_time.bat`
+  - 日常：`start_v3.bat`
+- **Python (`pyapp/`) 不是当前主启动路径**
