@@ -1,168 +1,94 @@
-# 黄小游——AI研学智能体（Python FastAPI 版）
+# 黄小游 V3 本地演示版（小白友好）
 
-> 面向零基础用户：按本文步骤执行即可启动。
-
-本项目是一个可运行 MVP，真实支持：
-- 教师创建活动、配置点位/任务、发布活动
-- 学生参与活动、AI 提问、保存问题、上传图片+文字证据
-- 系统汇总学习档案
-- 教师查看证据并评分评语
+## 1）这是什么
+这是一个适合课堂“云游学习”的网页演示平台：学生可以看路线、探索点位、收集证据、生成学习档案，老师可以看进度和作品。
 
 ---
 
-## 1. 你会用到的技术（你不需要全懂）
-- Python 3.11+
-- FastAPI + Jinja2 页面
-- SQLite 本地数据库
-- 本地文件上传目录
-- DeepSeek（OpenAI 兼容接口）
+## 2）我是小白，怎么启动（最短步骤）
+### 第一次启动
+1. 双击根目录 `start-first-time.bat`
+2. 等待窗口自动安装并启动
+3. 浏览器打开：`http://localhost:3000`
+
+### 以后每天启动
+1. 双击根目录 `start.bat`
+2. 打开：`http://localhost:3000`
+
+> 你不需要手动进目录，不需要先懂 Supabase，不需要先配 AI Key。
 
 ---
 
-## 2. 必备文件说明
-- `requirements.txt`：依赖清单（已补齐 `itsdangerous`）
-- `.env.example`：环境变量模板
-- `pyapp/scripts/init_db.py`：数据库初始化
-- `pyapp/scripts/seed_demo.py`：导入演示数据
-- `pyapp/scripts/preflight.py`：启动前自检（依赖/目录/数据库/配置）
+## 3）如果我什么都不配置，能不能用？
+**可以。**
+
+系统会自动进入 **Demo Mode（本地演示模式）**：
+- 可以登录并进入学生端、教师端演示
+- 可以看完整页面和主流程
+- 数据只保存在本地演示内存中
+- 不会同步到云端
+
+页面顶部会显示提示：
+- “当前为本地演示模式”
+- “未连接 Supabase，数据不会同步到云端”
 
 ---
 
-## 3. 环境变量（先做这一步）
-复制 `.env.example` 为 `.env`，然后按需修改：
+## 4）以后想接云服务（进阶）
+当你准备好后，再配置 `legacy/next_v1/.env.local`：
 
-```env
-DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
-DEEPSEEK_API_KEY=
-DEEPSEEK_MODEL=deepseek-chat
-DATABASE_URL=sqlite:///./huangxiaoyou.db
-UPLOAD_DIR=./uploads
-SECRET_KEY=replace-with-a-random-secret
-```
+### Supabase（可选增强）
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
----
+### AI（可选增强）
+- `OPENAI_API_KEY` 或 `DEEPSEEK_API_KEY`
+- `OPENAI_BASE_URL`（按服务商填写）
+- `OPENAI_MODEL`
 
-## 4. 首次运行（Windows PowerShell）
-> 必须按顺序执行，不要跳步。
-
-### 第 1 步：创建虚拟环境
-```powershell
-python -m venv .venv
-```
-
-### 第 2 步：激活虚拟环境
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-### 第 3 步：安装依赖
-```powershell
-pip install -r requirements.txt
-```
-
-### 第 4 步：运行启动前自检（推荐）
-```powershell
-python -m pyapp.scripts.preflight
-```
-
-### 第 5 步：初始化数据库
-```powershell
-python -m pyapp.scripts.init_db
-```
-
-### 第 6 步：导入演示数据
-```powershell
-python -m pyapp.scripts.seed_demo
-```
-
-### 第 7 步：启动服务
-```powershell
-uvicorn pyapp.main:app --reload
-```
-
-浏览器打开：`http://127.0.0.1:8000`
-
-演示账号：
-- admin / admin123
-- teacher / teacher123
-- student / student123
+配置后重启即可自动切换到云服务模式。
 
 ---
 
-## 5. 以后日常启动（Windows PowerShell）
-> 数据库初始化和导入演示数据通常只需首次执行一次。
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-python -m pyapp.scripts.preflight
-uvicorn pyapp.main:app --reload
-```
-
----
-
-## 6. 这个项目已经自动处理的“补坑项”
-你不需要手动创建这些目录，项目会自动创建：
-- `pyapp/static`
-- `pyapp/templates`（目录存在检查）
-- `UPLOAD_DIR` 指向的上传目录（默认 `./uploads`）
-
-另外，启动时会自动确保数据库表存在（幂等）。
-
----
-
-## 7. 常见问题
-### Q1：报错 `No module named 'itsdangerous'`
-A：依赖已写入 `requirements.txt`。重新执行：
-```powershell
-pip install -r requirements.txt
-```
-
-### Q2：报错 `Directory 'pyapp/static' does not exist`
-A：代码已加入自动创建逻辑。如果仍报错，先运行：
-```powershell
-python -m pyapp.scripts.preflight
-```
-
-### Q3：我没有 DeepSeek Key，能先跑吗？
-A：可以先不提 AI 问答，其他功能可演示。要体验 AI 问答需填写 `DEEPSEEK_API_KEY`。
-
----
-
-## 8. 功能范围（MVP）
+## 5）Demo Mode 下能演示哪些页面
 ### 学生端
-- 登录
-- 活动列表/详情
-- 学板块：AI导学问答 + 问题保存
-- 研板块：任务查看 + 待验证问题
-- 游板块点位页：简介、问题链、证据清单、AI问答
-- 上传证据（图片 + 文字）
-- 学习档案查看（问题/任务/证据真实汇总）
+- 首页 / 活动入口：`/student/activities`
+- 云游路线 / 地图页：`/student/activities/demo-activity-1/visit`
+- 点位探索页：`/student/sites/site-1`
+- 证据背包（在点位探索页内上传）
+- 学习档案页：`/student/activities/demo-activity-1/portfolio`
 
 ### 教师端
-- 创建活动
-- 编辑活动
-- 配置点位
-- 配置任务
-- 发布活动
-- 查看学生证据
-- 查看学习档案并评分评语
-
-### 后台
-- 用户管理基础页
-- 班级管理基础页
-- 活动管理基础页
+- 教师入口：`/teacher/activities/new`
+- 学生进度与作品查看：`/teacher/activities/demo-activity-1/students`
 
 ---
 
-## 9. 文件结构（核心）
-```text
-pyapp/
-  main.py
-  startup.py
-  models.py
-  database.py
-  config.py
-  services/
-  scripts/
-  templates/
-```
+## 6）常见问题（小白版）
+### Q1：页面打不开怎么办？
+- 看启动窗口有没有报错
+- 确认地址是 `http://localhost:3000`
+- 如果端口被占用，关闭其他 Node/Next 窗口后重试
+
+### Q2：为什么一直显示 Demo Mode？
+因为你还没配置 Supabase（这是正常的）。
+
+### Q3：为什么 AI 回答说“未配置 AI 服务”？
+因为你没有配置 `OPENAI_API_KEY` 或 `DEEPSEEK_API_KEY`。这不影响演示。
+
+### Q4：我不想看命令行，可以只双击吗？
+可以，直接双击：
+- 首次：`start-first-time.bat`
+- 日常：`start.bat`
+
+---
+
+## 7）给开发者的最少补充
+主前端唯一入口：`legacy/next_v1`。
+
+可用脚本：
+- `npm run dev`
+- `npm run setup`
+- `npm run demo`
+- `npm run doctor`
