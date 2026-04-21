@@ -1,0 +1,17 @@
+:root{--primary:#1e88e5;--secondary:#26a69a;--accent:#ff9800;--bg:#f4f8fb}
+body{background:var(--bg);font-family:'Segoe UI',system-ui,sans-serif}
+.v2-card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(30,136,229,.08);border:1px solid #e6eef7}
+.hero{background:linear-gradient(135deg,#1e88e5,#26a69a);color:#fff;border-radius:20px;padding:20px}
+.tag{display:inline-block;background:#e8f4ff;color:#1565c0;padding:4px 10px;border-radius:999px;font-size:12px}
+.progress-track{height:10px;background:#e8eef6;border-radius:999px;overflow:hidden}
+.progress-bar-v2{height:10px;background:linear-gradient(90deg,#1e88e5,#26a69a)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dfe8f2;display:flex;justify-content:space-around;padding:10px 0;z-index:50}
+.bottom-nav a{color:#4f6b85;text-decoration:none;font-size:13px}
+.bottom-nav a.active{color:var(--primary);font-weight:700}
+.page-space{padding-bottom:72px}
+.map-route .node{padding:12px;border-left:4px solid #b3d7f7;margin-bottom:10px;background:#fff;border-radius:10px}
+.map-route .node.done{border-left-color:#26a69a;background:#ecfffb}
+.hotspots{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.hotspot-btn{background:#fff3e0;border:1px solid #ffd6a8;padding:10px;border-radius:10px}
+.badge-chip{background:#fff7e8;border:1px solid #ffd08a;border-radius:999px;padding:4px 10px;font-size:12px}
+.teacher-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
