@@ -1,0 +1,34 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>教师学情页</h4>
+<div class="v2-card mb-3">
+  <h6>高频问题</h6>
+  <ul>{% for q in high_questions %}<li>{{ q[0] }}（{{ q[1] }}次）</li>{% else %}<li>暂无</li>{% endfor %}</ul>
+</div>
+<div class="v2-card mb-3">
+  <h6>学生证据与精选</h6>
+  {% for e,u in evidences %}
+    <div class="border rounded p-2 mb-2 d-flex justify-content-between align-items-center">
+      <span>{{ u }} - {{ e.evidence_type }} - {{ e.note or e.text_content }}</span>
+      <form method="post" action="/teacher/activities/{{ activity_id }}/feature" class="d-flex gap-2">
+        <input type="hidden" name="evidence_id" value="{{ e.id }}" />
+        <input class="form-control form-control-sm" name="note" placeholder="精选理由" />
+        <button class="btn btn-sm btn-warning">设为精选</button>
+      </form>
+    </div>
+  {% else %}<p>暂无证据</p>{% endfor %}
+</div>
+<div class="v2-card">
+  <h6>档案点评</h6>
+  {% for p,u in portfolios %}
+    <div class="border rounded p-2 mb-2">
+      <p>{{ u }}：{{ p.summary }}</p>
+      <form method="post" action="/teacher/portfolios/{{ p.id }}/review">
+        <input class="form-control mb-2" type="number" step="0.1" name="teacher_score" value="{{ p.teacher_score or 90 }}">
+        <textarea class="form-control mb-2" name="teacher_comment">{{ p.teacher_comment or '' }}</textarea>
+        <button class="btn btn-primary btn-sm">提交评价</button>
+      </form>
+    </div>
+  {% else %}<p>暂无档案</p>{% endfor %}
+</div>
+{% endblock %}
