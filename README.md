@@ -1,36 +1,32 @@
-# 黄小游——AI研学智能体（Python FastAPI 版）
+# 黄小游 V2（Python FastAPI 数字研学平台）
 
-> 面向零基础用户：按本文步骤执行即可启动。
+> 当前主版本：**V2 Python 课堂版**（虚拟地图 + 探索点位 + 任务 + 背包 + 成就 + 教师驾驶舱）
 
-本项目是一个可运行 MVP，真实支持：
-- 教师创建活动、配置点位/任务、发布活动
-- 学生参与活动、AI 提问、保存问题、上传图片+文字证据
-- 系统汇总学习档案
-- 教师查看证据并评分评语
+## 1. V2 新增亮点
+- 学生端 5 主入口：**首页 / 地图 / 任务 / 背包 / 我的**
+- 点位探索页重构：场景区、热点探索、AI导游、AI探究教练、问题链、证据清单、上传证据
+- 身份任务 Quest：小记者 / 城市观察员 / 工业遗产解码员
+- 成就徽章：首次提问、首次证据上传、证据达人、连续探索、最佳观察者
+- 教师驾驶舱：参与人数、证据总数、高频问题、待点评档案、精选展示
+- 教师精选展示：把优秀证据置顶给全班展示
 
----
+## 2. 目录（已收敛）
+```text
+pyapp/                 # Python 主应用（V2）
+  main.py
+  models.py
+  services/
+  scripts/
+  templates/
+  static/
+legacy/next_v1/        # 历史 Next/Supabase 代码（已收纳）
+requirements.txt
+.env.example
+README.md
+```
 
-## 1. 你会用到的技术（你不需要全懂）
-- Python 3.11+
-- FastAPI + Jinja2 页面
-- SQLite 本地数据库
-- 本地文件上传目录
-- DeepSeek（OpenAI 兼容接口）
-
----
-
-## 2. 必备文件说明
-- `requirements.txt`：依赖清单（已补齐 `itsdangerous`）
-- `.env.example`：环境变量模板
-- `pyapp/scripts/init_db.py`：数据库初始化
-- `pyapp/scripts/seed_demo.py`：导入演示数据
-- `pyapp/scripts/preflight.py`：启动前自检（依赖/目录/数据库/配置）
-
----
-
-## 3. 环境变量（先做这一步）
-复制 `.env.example` 为 `.env`，然后按需修改：
-
+## 3. 环境变量
+复制 `.env.example` 为 `.env`：
 ```env
 DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
 DEEPSEEK_API_KEY=
@@ -40,129 +36,77 @@ UPLOAD_DIR=./uploads
 SECRET_KEY=replace-with-a-random-secret
 ```
 
----
-
 ## 4. 首次运行（Windows PowerShell）
-> 必须按顺序执行，不要跳步。
-
-### 第 1 步：创建虚拟环境
 ```powershell
 python -m venv .venv
-```
-
-### 第 2 步：激活虚拟环境
-```powershell
 .\.venv\Scripts\Activate.ps1
-```
-
-### 第 3 步：安装依赖
-```powershell
 pip install -r requirements.txt
-```
-
-### 第 4 步：运行启动前自检（推荐）
-```powershell
 python -m pyapp.scripts.preflight
-```
-
-### 第 5 步：初始化数据库
-```powershell
 python -m pyapp.scripts.init_db
-```
-
-### 第 6 步：导入演示数据
-```powershell
 python -m pyapp.scripts.seed_demo
-```
-
-### 第 7 步：启动服务
-```powershell
 uvicorn pyapp.main:app --reload
 ```
-
-浏览器打开：`http://127.0.0.1:8000`
+访问：`http://127.0.0.1:8000`
 
 演示账号：
 - admin / admin123
 - teacher / teacher123
 - student / student123
 
----
-
-## 5. 以后日常启动（Windows PowerShell）
-> 数据库初始化和导入演示数据通常只需首次执行一次。
-
+## 5. 日常启动（Windows PowerShell）
 ```powershell
 .\.venv\Scripts\Activate.ps1
 python -m pyapp.scripts.preflight
 uvicorn pyapp.main:app --reload
 ```
 
----
+## 6. 推荐演示路径（V2）
+### 路径 A：学生探索流程
+1. 学生登录 → 首页
+2. 进入地图页 → 点位探索页
+3. 分别使用 AI 导游 / AI 探究教练
+4. 上传 1 张图片 + 1 条文字证据
+5. 打开背包页查看证据与卡片
+6. 打开“我的”查看徽章与档案
 
-## 6. 这个项目已经自动处理的“补坑项”
-你不需要手动创建这些目录，项目会自动创建：
-- `pyapp/static`
-- `pyapp/templates`（目录存在检查）
-- `UPLOAD_DIR` 指向的上传目录（默认 `./uploads`）
+### 路径 B：任务驱动流程
+1. 进入任务页
+2. 选择身份任务
+3. 标记完成任务
+4. 查看徽章变化
 
-另外，启动时会自动确保数据库表存在（幂等）。
+### 路径 C：教师课堂流程
+1. 教师登录 → 驾驶舱
+2. 查看参与人数、证据数、高频问题
+3. 进入学情页
+4. 将 1 条证据设为精选展示
+5. 评分并写评语
 
----
-
-## 7. 常见问题
-### Q1：报错 `No module named 'itsdangerous'`
-A：依赖已写入 `requirements.txt`。重新执行：
-```powershell
-pip install -r requirements.txt
-```
-
-### Q2：报错 `Directory 'pyapp/static' does not exist`
-A：代码已加入自动创建逻辑。如果仍报错，先运行：
+## 7. 启动保障（自动化）
+- 自动检查依赖（含 itsdangerous）
+- 自动创建目录：`pyapp/static`、`pyapp/templates`、`UPLOAD_DIR`
+- 自动确保数据库表存在（幂等）
+- 预检命令：
 ```powershell
 python -m pyapp.scripts.preflight
 ```
 
-### Q3：我没有 DeepSeek Key，能先跑吗？
-A：可以先不提 AI 问答，其他功能可演示。要体验 AI 问答需填写 `DEEPSEEK_API_KEY`。
-
----
-
-## 8. 功能范围（MVP）
-### 学生端
-- 登录
-- 活动列表/详情
-- 学板块：AI导学问答 + 问题保存
-- 研板块：任务查看 + 待验证问题
-- 游板块点位页：简介、问题链、证据清单、AI问答
-- 上传证据（图片 + 文字）
-- 学习档案查看（问题/任务/证据真实汇总）
-
-### 教师端
-- 创建活动
-- 编辑活动
-- 配置点位
-- 配置任务
-- 发布活动
-- 查看学生证据
-- 查看学习档案并评分评语
-
-### 后台
-- 用户管理基础页
-- 班级管理基础页
-- 活动管理基础页
-
----
-
-## 9. 文件结构（核心）
-```text
-pyapp/
-  main.py
-  startup.py
-  models.py
-  database.py
-  config.py
-  services/
-  scripts/
-  templates/
+## 8. 常见问题
+### 报错：No module named 'itsdangerous'
+执行：
+```powershell
+pip install -r requirements.txt
 ```
+
+### 报错：Directory 'pyapp/static' does not exist
+先执行：
+```powershell
+python -m pyapp.scripts.preflight
+```
+
+
+## 9. DeepSeek 配置与降级说明（已处理）
+- **不配置 `DEEPSEEK_API_KEY` 也可以正常启动与使用平台**。
+- 此时 AI 导游/AI 教练会返回友好提示，不会导致页面 500。
+- 若 DeepSeek 网络波动或请求失败，页面会显示“AI 服务暂时不可用，请稍后重试”，并继续允许学生完成任务和证据记录。
+

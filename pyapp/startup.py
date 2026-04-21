@@ -31,6 +31,13 @@ REQUIRED_TABLES = {
     "ai_conversations",
     "portfolios",
     "portfolio_items",
+    "backpack_items",
+    "identity_quests",
+    "student_quests",
+    "badges",
+    "user_badges",
+    "featured_items",
+    "site_completions",
 }
 
 
