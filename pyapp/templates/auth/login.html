@@ -1,0 +1,20 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+  <div class="col-lg-5">
+    <div class="hero mb-3">
+      <h3>欢迎来到黄小游 V2</h3>
+      <p class="mb-0">信息技术课堂里的数字研学平台</p>
+    </div>
+    <div class="v2-card">
+      <h5>账号登录</h5>
+      {% if error %}<div class="alert alert-danger py-2">{{ error }}</div>{% endif %}
+      <form method="post" action="/login">
+        <input class="form-control mb-2" name="username" placeholder="用户名（admin/teacher/student）" required />
+        <input class="form-control mb-2" type="password" name="password" placeholder="密码" required />
+        <button class="btn btn-primary w-100">进入平台</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
