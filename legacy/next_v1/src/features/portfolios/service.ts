@@ -7,7 +7,7 @@ export async function generatePortfolio(activityId: string, studentId: string) {
     const questions = demoState.questions.filter((x) => x.activity_id === activityId && x.student_id === studentId);
     const evidences = demoState.evidences.filter((x) => x.activity_id === activityId && x.student_id === studentId);
     const progresses = demoState.progresses.filter((x) => x.activity_id === activityId && x.student_id === studentId);
-    const summary = `提出问题${questions.length}条，提交证据${evidences.length}条，完成点位${progresses.length}个；这是本地演示档案。`;
+    const summary = `提出问题${questions.length}条，提交证据${evidences.length}条，完成点位${progresses.length}个；已生成学习档案。`;
 
     const pf = {
       id: `pf-${Date.now()}`,
@@ -15,7 +15,7 @@ export async function generatePortfolio(activityId: string, studentId: string) {
       student_id: studentId,
       summary,
       teacher_score: 88,
-      teacher_comment: '演示模式：可继续补充证据提升质量。',
+      teacher_comment: '可继续补充证据提升质量。',
       status: 'draft',
       updated_at: new Date().toISOString()
     };

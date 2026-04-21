@@ -46,7 +46,7 @@ export function EvidenceUpload({ activityId, siteId }: { activityId: string; sit
       });
     }
 
-    setMsg(isDemoMode ? '已保存到本地演示数据（不会同步云端）' : '上传成功');
+    setMsg(isDemoMode ? '已保存证据' : '上传成功');
     setText('');
     setNote('');
     setFile(null);

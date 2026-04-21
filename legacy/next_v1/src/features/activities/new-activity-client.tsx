@@ -26,9 +26,9 @@ export function NewActivityClient() {
   if (isDemoMode) {
     return (
       <div className="space-y-3">
-        <PageTitle title="教师驾驶舱（演示模式）" desc="可直接查看活动概览、学生进度与作品证据" />
+        <PageTitle title="教师驾驶舱" desc="可直接查看活动概览、学生进度与作品证据" />
         <Card className="space-y-2">
-          <p className="text-sm text-muted">当前未连接云端，以下为本地演示课堂数据。</p>
+          <p className="text-sm text-muted">当前为课堂预置数据，可直接进行配置与演示。</p>
           <div className="flex flex-wrap gap-3 text-sm">
             <Link href="/student/activities/demo-activity-1" className="text-primary">查看活动概览</Link>
             <Link href="/teacher/activities/demo-activity-1/students" className="text-primary">查看学生进度与作品</Link>
