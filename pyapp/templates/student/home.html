@@ -1,0 +1,44 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="hero mb-3">
+  <div class="d-flex justify-content-between align-items-start">
+    <div>
+      <div class="tag">本期主题</div>
+      <h4 class="mt-2">{{ active.title if active else '暂无活动' }}</h4>
+      <p class="mb-0">{{ active.description if active else '请等待教师发布活动' }}</p>
+    </div>
+    <a href="/student/map" class="btn btn-light btn-sm">去探索</a>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-8">
+    <div class="v2-card mb-3">
+      <h6>任务进度</h6>
+      <div class="progress-track"><div class="progress-bar-v2" style="width: {{ progress }}%"></div></div>
+      <p class="mt-2 mb-0">当前完成度：{{ progress }}%</p>
+    </div>
+    <div class="v2-card">
+      <h6>课堂精选展示</h6>
+      {% if featured %}
+        <ul class="mb-0">{% for item,student_name in featured %}<li>{{ student_name }}：{{ item.note or '优秀证据' }}</li>{% endfor %}</ul>
+      {% else %}<p class="text-muted mb-0">教师还未精选内容</p>{% endif %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="v2-card mb-3">
+      <h6>成就徽章</h6>
+      <div class="d-flex flex-wrap gap-2">
+        {% for b,_ in badges %}<span class="badge-chip">{{ b.name }}</span>{% else %}<span class="text-muted">暂无徽章</span>{% endfor %}
+      </div>
+    </div>
+    <div class="v2-card">
+      <h6>快捷入口</h6>
+      <div class="d-grid gap-2">
+        <a href="/student/map" class="btn btn-outline-primary btn-sm">继续地图探索</a>
+        <a href="/student/tasks" class="btn btn-outline-success btn-sm">查看任务</a>
+        <a href="/student/backpack" class="btn btn-outline-warning btn-sm">打开背包</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

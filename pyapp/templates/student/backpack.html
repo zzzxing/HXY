@@ -1,0 +1,17 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="v2-card mb-3">
+  <h5>我的证据背包</h5>
+  <p class="text-muted">收集图片、文字、问题、猜想和结论</p>
+  <form method="post" action="/student/backpack/card" class="row g-2">
+    <div class="col-md-3"><select class="form-select" name="item_type"><option value="hypothesis">猜想卡</option><option value="conclusion">结论卡</option><option value="clue">线索卡</option></select></div>
+    <div class="col-md-7"><input class="form-control" name="content" placeholder="输入卡片内容"></div>
+    <div class="col-md-2"><button class="btn btn-primary w-100">加入背包</button></div>
+  </form>
+</div>
+<div class="row g-3">
+  <div class="col-md-4"><div class="v2-card"><h6>图片/文字证据</h6><ul>{% for e in evidences %}<li>{{ e.evidence_type }} - {{ e.note or e.text_content or e.file_url }}</li>{% else %}<li>暂无</li>{% endfor %}</ul></div></div>
+  <div class="col-md-4"><div class="v2-card"><h6>问题卡</h6><ul>{% for q in questions %}<li>{{ q.content }}</li>{% else %}<li>暂无</li>{% endfor %}</ul></div></div>
+  <div class="col-md-4"><div class="v2-card"><h6>猜想/结论/线索</h6><ul>{% for c in cards %}<li>[{{ c.item_type }}] {{ c.content }}</li>{% else %}<li>暂无</li>{% endfor %}</ul></div></div>
+</div>
+{% endblock %}
