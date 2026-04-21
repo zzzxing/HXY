@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { PageTitle } from '@/components/layout/page-title';
 import { Card } from '@/components/ui/card';
 import { api } from '@/features/activities/activity-helpers';
 
@@ -15,16 +14,18 @@ export default function AdminSchoolClassPage() {
   }, []);
 
   return (
-    <div className="space-y-3">
-      <PageTitle title="后台：学校/班级管理" />
-      <Card>
-        <h3 className="font-semibold">学校</h3>
-        <ul className="text-sm">{schools.map((s) => <li key={s.id}>{s.name}</li>)}</ul>
-      </Card>
-      <Card>
-        <h3 className="font-semibold">班级</h3>
-        <ul className="text-sm">{classes.map((c) => <li key={c.id}>{c.name}</li>)}</ul>
-      </Card>
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold">学校 / 班级管理</h1>
+      <div className="grid gap-3 lg:grid-cols-2">
+        <Card>
+          <h3 className="font-semibold">学校列表</h3>
+          <ul className="mt-2 text-sm">{schools.map((s) => <li key={s.id} className="rounded border p-2">{s.name}</li>)}</ul>
+        </Card>
+        <Card>
+          <h3 className="font-semibold">班级列表</h3>
+          <ul className="mt-2 text-sm">{classes.map((c) => <li key={c.id} className="rounded border p-2">{c.name}</li>)}</ul>
+        </Card>
+      </div>
     </div>
   );
 }

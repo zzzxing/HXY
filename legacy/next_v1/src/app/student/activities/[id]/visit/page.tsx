@@ -1,43 +1,37 @@
 import Link from 'next/link';
-import { PageTitle } from '@/components/layout/page-title';
-import { getSessionProfile } from '@/lib/auth/session';
 import { Card } from '@/components/ui/card';
-import { isDemoMode } from '@/lib/demo/mode';
+import { getSessionProfile } from '@/lib/auth/session';
 import { demoSites, demoState } from '@/lib/demo/store';
 
 export default async function VisitPage({ params }: { params: { id: string } }) {
-  const { profile, supabase } = await getSessionProfile('student');
-
-  const sites = isDemoMode()
-    ? demoSites.filter((x) => x.activity_id === params.id)
-    : await supabase!.from('activity_sites').select('*').eq('activity_id', params.id).order('order_index').then((r) => r.data ?? []);
-
-  const progress = isDemoMode()
-    ? demoState.progresses.filter((x) => x.activity_id === params.id && x.student_id === profile.id)
-    : await supabase!.from('site_progresses').select('site_id').eq('activity_id', params.id).eq('student_id', profile.id).then((r) => r.data ?? []);
-
-  const evidences = isDemoMode()
-    ? demoState.evidences.filter((x) => x.activity_id === params.id && x.student_id === profile.id)
-    : await supabase!.from('evidences').select('site_id').eq('activity_id', params.id).eq('student_id', profile.id).then((r) => r.data ?? []);
-
-  const doneSet = new Set((progress ?? []).map((p: any) => p.site_id));
-  const evidenceCount: Record<string, number> = {};
-  (evidences ?? []).forEach((e: any) => {
-    if (!e.site_id) return;
-    evidenceCount[e.site_id] = (evidenceCount[e.site_id] || 0) + 1;
-  });
+  await getSessionProfile('student');
+  const sites = demoSites.filter((x) => x.activity_id === params.id);
+  const doneSet = new Set(demoState.progresses.map((x) => x.site_id));
+  const teacherSiteId = 'site-2';
 
   return (
-    <div className="space-y-3">
-      <PageTitle title="云游路线 / 地图页" desc="课堂投屏友好的点位列表，支持查看完成状态与证据数量" />
-      {(sites ?? []).map((site: any) => (
-        <Card key={site.id} className="space-y-1 border-indigo-100">
-          <h3 className="font-semibold">{site.order_index}. {site.name}</h3>
-          <p className="text-sm text-muted">{site.intro}</p>
-          <p className="mt-1 text-xs text-muted">证据数：{evidenceCount[site.id] ?? 0} / 状态：{doneSet.has(site.id) ? '已完成' : '未完成'}</p>
-          <Link href={`/student/sites/${site.id}`} className="mt-2 inline-block text-sm text-primary">进入点位探索页</Link>
-        </Card>
-      ))}
+    <div className="space-y-4">
+      <Card className="bg-slate-900 text-white">
+        <h1 className="text-2xl font-bold">路线 / 地图页</h1>
+        <p className="mt-1 text-sm text-slate-200">按照线路推进课堂云游，也可以自由进入任意点位。</p>
+        <p className="mt-2 inline-block rounded bg-amber-300/20 px-2 py-1 text-xs text-amber-200">教师当前讲解点位：{sites.find((x) => x.id === teacherSiteId)?.name}</p>
+      </Card>
+
+      <div className="grid gap-3 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2">
+        {sites.map((site) => (
+          <Card key={site.id} className="space-y-2">
+            <img src={site.cover_image} alt={site.name} className="h-36 w-full rounded-lg object-cover" />
+            <p className="text-xs text-muted">第 {site.order_index} 站</p>
+            <h3 className="font-semibold">{site.name}</h3>
+            <p className="line-clamp-2 text-sm text-muted">{site.intro}</p>
+            <div className="flex items-center justify-between text-xs">
+              <span className={doneSet.has(site.id) ? 'text-emerald-600' : 'text-amber-600'}>{doneSet.has(site.id) ? '已完成' : '进行中'}</span>
+              {site.id === teacherSiteId ? <span className="rounded bg-indigo-50 px-2 py-1 text-indigo-600">教师讲解中</span> : null}
+            </div>
+            <Link href={`/student/sites/${site.id}`} className="inline-block text-sm text-primary">进入点位</Link>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

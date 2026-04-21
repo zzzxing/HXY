@@ -1,7 +1,5 @@
-import { getSessionProfile } from '@/lib/auth/session';
-import { NewActivityClient } from '@/features/activities/new-activity-client';
+import { redirect } from 'next/navigation';
 
 export default async function TeacherNewActivityPage() {
-  await getSessionProfile('teacher');
-  return <NewActivityClient />;
+  redirect('/teacher/dashboard');
 }
