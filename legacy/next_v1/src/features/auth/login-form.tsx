@@ -20,8 +20,8 @@ export function LoginForm() {
 
   const gotoByRole = (role: string) => {
     if (role === 'student') router.push('/student/activities');
-    else if (role === 'teacher') router.push('/teacher/activities/new');
-    else router.push('/admin/users');
+    else if (role === 'teacher') router.push('/teacher/dashboard');
+    else router.push('/admin/studio');
     router.refresh();
   };
 
@@ -42,25 +42,18 @@ export function LoginForm() {
       const me = await fetch('/api/me').then((r) => r.json());
       gotoByRole(me.data.role);
     } catch {
-      setError('登录失败，请检查配置。你也可以清空 Supabase 配置后使用 Demo Mode。');
+      setError('登录失败，请检查账号或配置。');
     }
   };
 
   return (
-    <Card className="space-y-3">
+    <Card className="mx-auto max-w-md space-y-3">
       <h1 className="text-xl font-semibold">登录黄小游</h1>
-      {isDemoMode ? <p className="rounded bg-amber-50 p-2 text-sm text-amber-700">当前为本地演示模式：未连接 Supabase，可直接体验学生端和教师端流程。</p> : null}
       <input className="w-full rounded border p-2" placeholder="邮箱" value={email} onChange={(e) => setEmail(e.target.value)} />
       <input className="w-full rounded border p-2" type="password" placeholder="密码" value={password} onChange={(e) => setPassword(e.target.value)} />
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <Button className="w-full" onClick={onLogin}>登录</Button>
-      {isDemoMode ? (
-        <div className="grid grid-cols-1 gap-2 text-sm">
-          <Button onClick={() => { setDemoRole('student'); gotoByRole('student'); }}>学生演示入口</Button>
-          <Button onClick={() => { setDemoRole('teacher'); gotoByRole('teacher'); }}>教师演示入口</Button>
-          <Button onClick={() => { setDemoRole('admin'); gotoByRole('admin'); }}>管理员演示入口</Button>
-        </div>
-      ) : null}
+      <p className="text-xs text-muted">示例：student@demo.local / teacher@demo.local / admin@demo.local</p>
     </Card>
   );
 }

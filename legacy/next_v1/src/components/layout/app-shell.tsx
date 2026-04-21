@@ -5,7 +5,7 @@ export function AppShell({ children }: PropsWithChildren) {
   return (
     <>
       <TopNav />
-      <main className="container-mobile py-4">{children}</main>
+      <main className="container-mobile py-5 lg:py-7">{children}</main>
     </>
   );
 }

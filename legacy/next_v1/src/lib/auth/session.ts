@@ -14,8 +14,8 @@ export async function getSessionProfile(requiredRole?: UserRole) {
 
     if (requiredRole && roleFromCookie !== requiredRole) {
       if (requiredRole === 'student') redirect('/student/activities');
-      if (requiredRole === 'teacher') redirect('/teacher/activities/new');
-      redirect('/admin/users');
+      if (requiredRole === 'teacher') redirect('/teacher/dashboard');
+      redirect('/admin/studio');
     }
 
     return { user: { id: profile.id, email: `${profile.role}@demo.local` }, profile, supabase: null };
@@ -32,8 +32,8 @@ export async function getSessionProfile(requiredRole?: UserRole) {
   if (!profile) redirect('/login');
   if (requiredRole && profile.role !== requiredRole) {
     if (profile.role === 'student') redirect('/student/activities');
-    if (profile.role === 'teacher') redirect('/teacher/activities/new');
-    redirect('/admin/users');
+    if (profile.role === 'teacher') redirect('/teacher/dashboard');
+    redirect('/admin/studio');
   }
 
   return { user, profile, supabase };
