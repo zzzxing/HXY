@@ -13,6 +13,7 @@ def ask_deepseek(
     task_text: str | None,
     question: str,
     student_id: int,
+    mode: str = "coach",
 ) -> str:
     activity = db.query(Activity).filter(Activity.id == activity_id).first()
     site = db.query(ActivitySite).filter(ActivitySite.id == site_id).first() if site_id else None
@@ -20,10 +21,15 @@ def ask_deepseek(
         task = db.query(Task).filter(Task.activity_id == activity_id, Task.phase == phase).order_by(Task.sort_order.asc()).first()
         task_text = task.title if task else ""
 
+    if mode == "guide":
+        role_prompt = "你是AI导游，帮学生理解背景、看点与观察角度。"
+    else:
+        role_prompt = "你是AI探究教练，重点引导学生提出证据和解释。"
+
     system_prompt = (
-        "你是黄小游，面向中小学生。"
-        "不要直接给最终答案，不要代写整份成果。"
-        "请简洁回答，并通过提问引导学生观察、比较、记录证据、形成解释。"
+        f"{role_prompt}"
+        "回答要简洁，适合中小学生；不要直接给最终标准答案，不要代写。"
+        "多用启发式提问，引导观察、比较、记录证据。"
         f"活动: {activity.title if activity else ''}; 点位: {site.name if site else '无'}; 阶段: {phase}; 当前任务: {task_text or ''}."
     )
 
@@ -41,6 +47,7 @@ def ask_deepseek(
             student_id=student_id,
             site_id=site_id,
             phase=phase,
+            mode=mode,
             user_message=question,
             ai_message=reply,
         )

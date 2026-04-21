@@ -1,0 +1,11 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="v2-card mb-3">
+  <h5>我的学习档案</h5>
+  <ul>{% for p in portfolios %}<li>活动#{{ p.activity_id }} - {{ p.summary }} | 评分: {{ p.teacher_score or '待评分' }}</li>{% else %}<li>暂无档案</li>{% endfor %}</ul>
+</div>
+<div class="v2-card">
+  <h5>我的成就</h5>
+  <div class="d-flex flex-wrap gap-2">{% for b,_ in badges %}<span class="badge-chip">{{ b.name }}</span>{% else %}<span class="text-muted">暂无成就</span>{% endfor %}</div>
+</div>
+{% endblock %}

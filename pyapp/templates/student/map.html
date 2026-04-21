@@ -1,0 +1,19 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="v2-card mb-3">
+  <h5>虚拟研学地图</h5>
+  <p class="text-muted mb-0">{{ activity.title if activity else '暂无活动' }} · 按路线完成点位探索</p>
+</div>
+<div class="map-route">
+  {% for s in sites %}
+  <div class="node {% if s.id in evidence_site_ids %}done{% endif %}">
+    <div class="d-flex justify-content-between">
+      <strong>{{ s.order_index }}. {{ s.name }}</strong>
+      <span class="tag">{% if s.id in evidence_site_ids %}已完成{% else %}待探索{% endif %}</span>
+    </div>
+    <div class="text-muted small mb-2">{{ s.intro }}</div>
+    <a href="/student/sites/{{ s.id }}" class="btn btn-sm btn-primary">进入点位</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
