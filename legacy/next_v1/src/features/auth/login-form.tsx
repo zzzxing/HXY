@@ -21,7 +21,7 @@ export function LoginForm() {
   const gotoByRole = (role: string) => {
     if (role === 'student') router.push('/student/activities');
     else if (role === 'teacher') router.push('/teacher/dashboard');
-    else router.push('/admin/studio');
+    else router.push('/admin/users');
     router.refresh();
   };
 

@@ -15,7 +15,7 @@ export async function getSessionProfile(requiredRole?: UserRole) {
     if (requiredRole && roleFromCookie !== requiredRole) {
       if (requiredRole === 'student') redirect('/student/activities');
       if (requiredRole === 'teacher') redirect('/teacher/dashboard');
-      redirect('/admin/studio');
+      redirect('/admin/users');
     }
 
     return { user: { id: profile.id, email: `${profile.role}@demo.local` }, profile, supabase: null };
@@ -33,7 +33,7 @@ export async function getSessionProfile(requiredRole?: UserRole) {
   if (requiredRole && profile.role !== requiredRole) {
     if (profile.role === 'student') redirect('/student/activities');
     if (profile.role === 'teacher') redirect('/teacher/dashboard');
-    redirect('/admin/studio');
+    redirect('/admin/users');
   }
 
   return { user, profile, supabase };

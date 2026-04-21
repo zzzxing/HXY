@@ -15,15 +15,15 @@ export default function AdminSchoolClassPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">学校 / 班级管理</h1>
+      <h1 className="text-2xl font-bold">学校 / 班级 / 归属管理</h1>
       <div className="grid gap-3 lg:grid-cols-2">
         <Card>
           <h3 className="font-semibold">学校列表</h3>
           <ul className="mt-2 text-sm">{schools.map((s) => <li key={s.id} className="rounded border p-2">{s.name}</li>)}</ul>
         </Card>
         <Card>
-          <h3 className="font-semibold">班级列表</h3>
-          <ul className="mt-2 text-sm">{classes.map((c) => <li key={c.id} className="rounded border p-2">{c.name}</li>)}</ul>
+          <h3 className="font-semibold">班级与账号归属</h3>
+          <ul className="mt-2 text-sm">{classes.map((c) => <li key={c.id} className="rounded border p-2">{c.name} / 绑定教师：陈老师</li>)}</ul>
         </Card>
       </div>
     </div>

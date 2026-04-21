@@ -13,7 +13,7 @@ export default async function TeacherConsolePage() {
         <Card><h3 className="font-semibold">倒计时任务</h3><p className="mt-1 text-sm text-muted">剩余时间</p><p className="mt-2 text-2xl font-bold">12:30</p></Card>
         <Card><h3 className="font-semibold">学生完成率</h3><p className="mt-1 text-2xl font-bold text-emerald-600">84%</p><p className="text-xs text-muted">已完成 30 / 36</p></Card>
       </div>
-      <Card><h3 className="font-semibold">点名展示优秀作品</h3><p className="mt-2 text-sm">刘同学《矿坑结构图》、张同学《工人故事口述卡》</p></Card>
+      <Card><h3 className="font-semibold">点名展示优秀作品</h3><p className="mt-2 text-sm">刘同学《矿坑结构图》、张同学《工人故事口述卡》</p><p className="mt-1 text-xs text-muted">可在学生端实时预览：/student/activities</p></Card>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 const NAVS = [
   { href: '/student/activities', label: '学生端' },
   { href: '/teacher/dashboard', label: '教师端' },
-  { href: '/admin/studio', label: '管理端' }
+  { href: '/admin/users', label: '管理端' }
 ];
 
 export function TopNav() {
@@ -18,7 +18,7 @@ export function TopNav() {
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-sky-500 to-indigo-600" />
           <div>
-            <p className="text-sm font-semibold leading-4">黄小游 V3.1</p>
+            <p className="text-sm font-semibold leading-4">黄小游 V3.2</p>
             <p className="text-xs text-muted">课堂云游学习平台</p>
           </div>
         </div>

@@ -1,27 +1,29 @@
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { getSessionProfile } from '@/lib/auth/session';
-import { demoActivity, demoScenic, demoSites, demoTasks, classWall, demoState } from '@/lib/demo/store';
+import { demoCases, demoRoutes, demoSites, demoTasks, classWall, demoState } from '@/lib/demo/store';
 
 export default async function StudentActivitiesPage() {
   await getSessionProfile('student');
+  const demoCase = demoCases[0];
+  const route = demoRoutes[0];
   const finished = demoState.progresses.length;
 
   return (
     <div className="space-y-5">
-      <section className="relative overflow-hidden rounded-3xl p-8 text-white" style={{ backgroundImage: `linear-gradient(120deg,rgba(15,23,42,.78),rgba(30,64,175,.62)),url(${demoScenic.banner})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <section className="relative overflow-hidden rounded-3xl p-8 text-white" style={{ backgroundImage: `linear-gradient(120deg,rgba(15,23,42,.78),rgba(30,64,175,.62)),url(${demoCase.cover_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <p className="text-sm text-sky-100">信息技术课堂云游专题</p>
-        <h1 className="mt-2 text-3xl font-bold lg:text-4xl">{demoActivity.title}</h1>
-        <p className="mt-2 max-w-3xl text-sm text-slate-100 lg:text-base">{demoActivity.description}</p>
+        <h1 className="mt-2 text-3xl font-bold lg:text-4xl">{demoCase.title}</h1>
+        <p className="mt-2 max-w-3xl text-sm text-slate-100 lg:text-base">{demoCase.summary}</p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href={`/student/activities/${demoActivity.id}/visit`} className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900">开始云游</Link>
+          <Link href={`/student/activities/demo-activity-1/visit`} className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900">开始云游</Link>
           <Link href="/student/tasks" className="rounded-lg border border-white/70 px-4 py-2 text-sm">进入任务中心</Link>
         </div>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2">
         <Card className="xl:col-span-2">
-          <h3 className="font-semibold">路线概览</h3>
+          <h3 className="font-semibold">路线概览 · {route.title}</h3>
           <div className="mt-3 grid gap-2 md:grid-cols-2">
             {demoSites.map((site) => <div key={site.id} className="rounded-lg border p-2 text-sm">{site.order_index}. {site.name}</div>)}
           </div>

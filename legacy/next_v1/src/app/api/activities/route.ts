@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { listActivitiesForRole } from '@/features/activities/service';
 import { fail, ok, requireProfile } from '../_utils';
 import { isDemoMode } from '@/lib/demo/mode';
-import { demoActivity } from '@/lib/demo/store';
+import { demoCases } from '@/lib/demo/store';
 
 const schema = z.object({
   title: z.string().min(2),
@@ -26,7 +26,8 @@ export async function POST(req: Request) {
   if (!payload.success) return fail(payload.error.issues[0]?.message ?? '参数错误');
 
   if (isDemoMode()) {
-    return ok({ ...demoActivity, ...payload.data, id: 'demo-activity-1', teacher_id: profile.id, status: 'draft' });
+    const c = demoCases[0];
+    return ok({ id: 'demo-activity-1', title: payload.data.title || c.title, description: payload.data.description || c.summary, teacher_id: profile.id, status: 'draft' });
   }
 
   const { data, error } = await supabase!.from('activities').insert({ ...payload.data, teacher_id: profile.id, status: 'draft' }).select('*').single();

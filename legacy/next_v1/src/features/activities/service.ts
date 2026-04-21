@@ -1,16 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
 import { isDemoMode } from '@/lib/demo/mode';
-import { demoActivity } from '@/lib/demo/store';
+import { demoCases } from '@/lib/demo/store';
 
 export async function listActivitiesForRole(profileId: string, role: string) {
   if (isDemoMode()) {
-    return [
-      {
-        ...demoActivity,
-        teacher_id: 'demo-teacher-1',
-        created_at: new Date().toISOString()
-      }
-    ];
+    const c = demoCases[0];
+    return [{ id: 'demo-activity-1', title: c.title, description: c.summary, theme: '黄石工业文化', teacher_id: 'demo-teacher-1', created_at: new Date().toISOString() }];
   }
 
   const supabase = createClient();

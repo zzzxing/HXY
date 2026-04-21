@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { api } from '@/features/activities/activity-helpers';
+import { demoMediaAssets } from '@/lib/demo/store';
 
 export default function TeacherStudentsPage({ params }: { params: { id: string } }) {
   const [evidences, setEvidences] = useState<any[]>([]);
@@ -40,8 +41,13 @@ export default function TeacherStudentsPage({ params }: { params: { id: string }
 
       <div className="grid gap-3 lg:grid-cols-3">
         <Card>
-          <h3 className="mb-2 font-semibold">学生证据</h3>
-          <ul className="space-y-1 text-sm">{evidences.map((e) => <li key={e.id}>{e.profiles?.name ?? '学生'} - {e.evidence_type} - {e.note || e.text_content}</li>)}</ul>
+          <h3 className="mb-2 font-semibold">学生证据（含资源引用）</h3>
+          <ul className="space-y-2 text-sm">
+            {evidences.map((e) => {
+              const asset = demoMediaAssets.find((a: any) => a.id === e.resource_asset_id);
+              return <li key={e.id} className="rounded border p-2">{e.profiles?.name ?? '学生'} / 资源：{asset?.title || '未引用'} / 说明：{e.note || e.text_content}</li>;
+            })}
+          </ul>
         </Card>
         <Card>
           <h3 className="mb-2 font-semibold">点位完成记录</h3>
@@ -55,6 +61,7 @@ export default function TeacherStudentsPage({ params }: { params: { id: string }
             <div key={p.id} className="rounded border p-2 text-sm">
               <p>{p.profiles?.name}：{p.summary}</p>
               <p>当前评分：{p.teacher_score ?? '未评分'}</p>
+              <p className="text-xs text-muted">证据是否支撑结论：可进一步补充多媒体证据。</p>
               <Button className="mt-2" onClick={() => review(p.id)}>提交评价</Button>
             </div>
           ))}

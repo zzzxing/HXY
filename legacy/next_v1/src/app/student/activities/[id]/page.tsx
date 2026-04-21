@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { getSessionProfile } from '@/lib/auth/session';
-import { demoActivity, demoSites } from '@/lib/demo/store';
+import { demoCases, demoSites, demoMediaAssets } from '@/lib/demo/store';
 
 export default async function StudentActivityDetailPage() {
   await getSessionProfile('student');
@@ -9,10 +9,10 @@ export default async function StudentActivityDetailPage() {
   return (
     <div className="space-y-4">
       <Card className="bg-white/90">
-        <h1 className="text-2xl font-bold">{demoActivity.title}</h1>
-        <p className="mt-1 text-sm text-muted">{demoActivity.description}</p>
+        <h1 className="text-2xl font-bold">{demoCases[0].title}</h1>
+        <p className="mt-1 text-sm text-muted">{demoCases[0].summary}</p>
         <div className="mt-3 flex flex-wrap gap-3 text-sm">
-          <Link href={`/student/activities/${demoActivity.id}/visit`} className="text-primary">路线 / 地图</Link>
+          <Link href="/student/activities/demo-activity-1/visit" className="text-primary">路线 / 地图</Link>
           <Link href="/student/tasks" className="text-primary">任务中心</Link>
           <Link href="/student/backpack" className="text-primary">证据背包</Link>
           <Link href="/student/portfolio" className="text-primary">学习档案</Link>
@@ -20,14 +20,17 @@ export default async function StudentActivityDetailPage() {
         </div>
       </Card>
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {demoSites.map((site) => (
-          <Card key={site.id}>
-            <img src={site.cover_image} alt={site.name} className="h-36 w-full rounded-lg object-cover" />
-            <h3 className="mt-2 font-semibold">{site.order_index}. {site.name}</h3>
-            <p className="mt-1 line-clamp-2 text-sm text-muted">{site.intro}</p>
-            <Link href={`/student/sites/${site.id}`} className="mt-2 inline-block text-sm text-primary">进入点位探索</Link>
-          </Card>
-        ))}
+        {demoSites.map((site) => {
+          const img = demoMediaAssets.find((a: any) => a.site_id === site.id && a.type === 'image');
+          return (
+            <Card key={site.id}>
+              {img ? <img src={img.url} alt={site.name} className="h-36 w-full rounded-lg object-cover" /> : null}
+              <h3 className="mt-2 font-semibold">{site.order_index}. {site.name}</h3>
+              <p className="mt-1 line-clamp-2 text-sm text-muted">{site.intro}</p>
+              <Link href={`/student/sites/${site.id}`} className="mt-2 inline-block text-sm text-primary">进入点位探索</Link>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
