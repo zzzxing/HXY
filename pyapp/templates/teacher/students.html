@@ -1,0 +1,17 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>学生过程与成果</h4>
+<h6>证据</h6>
+<ul>{% for e,u in evidences %}<li>{{ u }} - {{ e.evidence_type }} - {{ e.note or e.text_content }}</li>{% endfor %}</ul>
+<h6>档案评价</h6>
+{% for p,u in portfolios %}
+<div class="card card-body mb-2">
+  <p>{{ u }}: {{ p.summary }}</p>
+  <form method="post" action="/teacher/portfolios/{{ p.id }}/review">
+    <input class="form-control mb-2" type="number" step="0.1" name="teacher_score" value="{{ p.teacher_score or 90 }}">
+    <textarea class="form-control mb-2" name="teacher_comment">{{ p.teacher_comment or '' }}</textarea>
+    <button class="btn btn-primary">提交评价</button>
+  </form>
+</div>
+{% endfor %}
+{% endblock %}

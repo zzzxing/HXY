@@ -1,0 +1,12 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>学习档案</h4>
+<div class="card mb-3"><div class="card-body">
+  <p>{{ portfolio.summary }}</p>
+  <p>评分：{{ portfolio.teacher_score or '待评分' }}</p>
+  <p>评语：{{ portfolio.teacher_comment or '待评价' }}</p>
+</div></div>
+{% for i in items %}
+<div class="border rounded p-2 mb-2"><strong>{{ i.item_type }}</strong><pre class="mb-0">{{ i.content }}</pre></div>
+{% endfor %}
+{% endblock %}
