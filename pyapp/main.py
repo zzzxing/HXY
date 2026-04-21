@@ -7,7 +7,6 @@ from fastapi import FastAPI, Request, Depends, Form, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.middleware.sessions import SessionMiddleware
 from sqlalchemy.orm import Session
 
 from .config import settings
@@ -19,8 +18,17 @@ from .models import (
 from .services.auth import verify_password, get_current_user, require_role
 from .services.ai import ask_deepseek
 from .services.portfolio import generate_portfolio
+from .startup import run_preflight, ensure_runtime_dirs
+
+
+# 启动前自检：缺依赖/缺目录/缺表时给出可读错误
+run_preflight(allow_weak_secret=True)
+ensure_runtime_dirs()
 
 app = FastAPI(title=settings.app_name)
+
+# 延迟导入 SessionMiddleware，确保缺依赖时报错信息更友好
+from starlette.middleware.sessions import SessionMiddleware
 app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 
 templates = Jinja2Templates(directory="pyapp/templates")
