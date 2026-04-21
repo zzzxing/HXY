@@ -1,0 +1,26 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3"><h4>活动编辑：{{ activity.title }}</h4><a href="/teacher/dashboard" class="btn btn-outline-secondary btn-sm">驾驶舱</a></div>
+<div class="row g-3">
+  <div class="col-md-6">
+    <form method="post" action="/teacher/activities/{{ activity.id }}/site" class="v2-card mb-3">
+      <h6>点位配置</h6>
+      <input class="form-control mb-2" name="name" placeholder="点位名称" required>
+      <input class="form-control mb-2" name="intro" placeholder="点位简介">
+      <button class="btn btn-primary">添加点位</button>
+    </form>
+    <div class="v2-card"><ul>{% for s in sites %}<li>{{ s.order_index }}. {{ s.name }}</li>{% else %}<li>暂无点位</li>{% endfor %}</ul></div>
+  </div>
+  <div class="col-md-6">
+    <form method="post" action="/teacher/activities/{{ activity.id }}/task" class="v2-card mb-3">
+      <h6>任务配置</h6>
+      <select name="phase" class="form-select mb-2"><option value="learn">学</option><option value="research">研</option><option value="visit">游</option></select>
+      <input class="form-control mb-2" name="title" placeholder="任务标题" required>
+      <input class="form-control mb-2" name="description" placeholder="任务说明">
+      <button class="btn btn-primary">添加任务</button>
+    </form>
+    <div class="v2-card"><ul>{% for t in tasks %}<li>{{ t.phase }} - {{ t.title }}</li>{% else %}<li>暂无任务</li>{% endfor %}</ul></div>
+  </div>
+</div>
+<form method="post" action="/teacher/activities/{{ activity.id }}/publish" class="mt-3"><button class="btn btn-success">发布活动</button></form>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>{{ site.name }}</h4>
+<p>{{ site.intro }}</p>
+<p><strong>问题链：</strong>{{ site.problem_chain }}</p>
+<p><strong>证据清单：</strong>{{ site.evidence_checklist }}</p>
+<form method="post" action="/student/sites/{{ site.id }}/ask" class="mb-3">
+  <input class="form-control mb-2" name="question" placeholder="点位提问" />
+  <button class="btn btn-outline-primary">AI提问</button>
+</form>
+{% if ai_reply %}<div class="alert alert-info">AI：{{ ai_reply }}</div>{% endif %}
+<form method="post" action="/student/sites/{{ site.id }}/evidence" enctype="multipart/form-data" class="card card-body mb-3">
+  <h6>上传证据（图片+文字）</h6>
+  <input class="form-control mb-2" type="file" name="image" accept="image/*" />
+  <textarea class="form-control mb-2" name="text_content" placeholder="文字证据"></textarea>
+  <input class="form-control mb-2" name="note" placeholder="备注" />
+  <button class="btn btn-primary">提交证据</button>
+</form>
+<h6>我的证据</h6>
+<ul>{% for e in evidences %}<li>{{ e.evidence_type }} - {{ e.note or e.text_content or e.file_url }}</li>{% endfor %}</ul>
+{% endblock %}

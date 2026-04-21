@@ -1,0 +1,39 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-7">
+    <div class="v2-card">
+      <h5>任务中心</h5>
+      <h6 class="mt-3">必做 / 选做任务</h6>
+      <ul class="mb-0">{% for t in tasks %}<li>[{{ '必做' if t.required else '选做' }}] {{ t.phase }} - {{ t.title }}</li>{% endfor %}</ul>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="v2-card mb-3">
+      <h6>身份任务（Quest）</h6>
+      {% for q in quests %}
+      <form method="post" action="/student/tasks/select-quest" class="mb-2">
+        <input type="hidden" name="quest_id" value="{{ q.id }}" />
+        <div class="border rounded p-2">
+          <strong>{{ q.role_name }}</strong>
+          <div class="small text-muted">{{ q.title }}</div>
+          <button class="btn btn-sm btn-outline-primary mt-1">选择身份</button>
+        </div>
+      </form>
+      {% endfor %}
+    </div>
+    <div class="v2-card">
+      <h6>我的身份任务</h6>
+      {% for sq in my_quests %}
+      <form method="post" action="/student/tasks/complete-quest" class="d-flex justify-content-between align-items-center mb-2 border rounded p-2">
+        <span>任务ID #{{ sq.quest_id }} - {{ sq.status }}</span>
+        {% if sq.status != 'done' %}
+        <input type="hidden" name="student_quest_id" value="{{ sq.id }}" />
+        <button class="btn btn-sm btn-success">标记完成</button>
+        {% endif %}
+      </form>
+      {% else %}<p class="text-muted mb-0">先选择一个身份任务</p>{% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
