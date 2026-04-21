@@ -1,0 +1,13 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>学板块</h4>
+<form method="post" action="/student/activities/{{ activity_id }}/learn/ask" class="mb-3">
+  <textarea class="form-control mb-2" name="question" placeholder="输入导学问题"></textarea>
+  <button class="btn btn-primary">提问并保存问题</button>
+</form>
+{% if request.session.get('last_ai_reply') %}
+<div class="alert alert-info">AI：{{ request.session.get('last_ai_reply') }}</div>
+{% endif %}
+<h5>我的问题</h5>
+<ul>{% for q in questions %}<li>{{ q.content }}</li>{% endfor %}</ul>
+{% endblock %}

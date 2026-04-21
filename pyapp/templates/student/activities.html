@@ -1,0 +1,10 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>我的活动</h4>
+{% for a in activities %}
+<div class="card mb-2"><div class="card-body">
+  <h5>{{ a.title }}</h5><p>{{ a.description }}</p>
+  <a class="btn btn-sm btn-primary" href="/student/activities/{{ a.id }}">进入活动</a>
+</div></div>
+{% endfor %}
+{% endblock %}

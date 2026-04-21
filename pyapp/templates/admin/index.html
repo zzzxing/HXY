@@ -1,0 +1,9 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<h4>后台基础管理</h4>
+<div class="teacher-grid">
+  <div class="v2-card"><h6>用户</h6><ul>{% for u in users %}<li>{{ u.name }} / {{ u.role }}</li>{% endfor %}</ul></div>
+  <div class="v2-card"><h6>班级</h6><ul>{% for c in classes %}<li>{{ c.name }}</li>{% endfor %}</ul></div>
+  <div class="v2-card"><h6>活动</h6><ul>{% for a in activities %}<li>{{ a.title }} ({{ a.status }})</li>{% endfor %}</ul></div>
+</div>
+{% endblock %}

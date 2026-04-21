@@ -1,0 +1,32 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="hero mb-3">
+  <h4>我的学习成果档案</h4>
+  <p class="mb-0">问题链 → 任务链 → 证据链 → 成果链</p>
+</div>
+
+<div class="teacher-grid mb-3">
+  <div class="v2-card"><h6>问题数</h6><h3>{{ q_count }}</h3></div>
+  <div class="v2-card"><h6>任务数</h6><h3>{{ t_count }}</h3></div>
+  <div class="v2-card"><h6>证据数</h6><h3>{{ e_count }}</h3></div>
+  <div class="v2-card"><h6>教师评分</h6><h3>{{ portfolio.teacher_score or '-' }}</h3></div>
+</div>
+
+<div class="v2-card mb-3">
+  <h6>系统总结</h6>
+  <p>{{ portfolio.summary }}</p>
+  <p class="mb-0"><strong>教师评语：</strong>{{ portfolio.teacher_comment or '教师待评价' }}</p>
+</div>
+
+<div class="v2-card">
+  <h6>成果时间线</h6>
+  {% for i in items %}
+  <div class="border-start border-3 ps-3 mb-3">
+    <span class="tag">{{ i.item_type }}</span>
+    <pre class="mb-0 mt-2 small">{{ i.content }}</pre>
+  </div>
+  {% else %}
+  <p>暂无明细</p>
+  {% endfor %}
+</div>
+{% endblock %}

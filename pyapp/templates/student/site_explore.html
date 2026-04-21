@@ -1,0 +1,73 @@
+{% extends 'base/layout.html' %}
+{% block content %}
+<div class="v2-card mb-3">
+  <div class="d-flex justify-content-between align-items-start">
+    <div>
+      <div class="tag">点位探索页</div>
+      <h4 class="mt-2">{{ site.name }}</h4>
+      <p>{{ site.intro }}</p>
+    </div>
+    <a href="/student/map" class="btn btn-outline-primary btn-sm">推荐下一站</a>
+  </div>
+  <div class="p-3 rounded" style="background:#dff5f3">场景主视觉区域（可替换真实图片）</div>
+</div>
+
+<div class="v2-card mb-3">
+  <h6>热点探索</h6>
+  <div class="hotspots">{% for h in hotspots %}<button class="hotspot-btn">{{ h }}</button>{% else %}<span class="text-muted">暂无热点</span>{% endfor %}</div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="v2-card mb-3">
+      <h6>AI 导游模式</h6>
+      <form method="post" action="/student/sites/{{ site.id }}/ask-guide">
+        <input class="form-control mb-2" name="question" placeholder="这个点位有什么历史背景？" />
+        <button class="btn btn-outline-primary">问 AI 导游</button>
+      </form>
+      {% if guide_reply %}<div class="alert alert-info mt-2 mb-0">{{ guide_reply }}</div>{% endif %}
+    </div>
+    <div class="v2-card">
+      <h6>AI 探究教练模式</h6>
+      <form method="post" action="/student/sites/{{ site.id }}/ask-coach">
+        <input class="form-control mb-2" name="question" placeholder="我该观察什么证据？" />
+        <button class="btn btn-outline-success">问 AI 教练</button>
+      </form>
+      {% if coach_reply %}<div class="alert alert-success mt-2 mb-0">{{ coach_reply }}</div>{% endif %}
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="v2-card mb-3">
+      <h6>问题链</h6>
+      <pre class="mb-0 small">{{ site.problem_chain }}</pre>
+    </div>
+    <div class="v2-card">
+      <h6>证据清单</h6>
+      <pre class="mb-0 small">{{ site.evidence_checklist }}</pre>
+    </div>
+  </div>
+</div>
+
+
+<div class="v2-card mt-3 mb-3">
+  <h6>点位完成状态</h6>
+  {% if completed %}
+    <span class="badge text-bg-success">我已完成此点位</span>
+  {% else %}
+    <form method="post" action="/student/sites/{{ site.id }}/complete">
+      <button class="btn btn-success btn-sm">标记“我已完成此点位”</button>
+    </form>
+  {% endif %}
+</div>
+
+<div class="v2-card mt-3">
+  <h6>上传证据并完成点位</h6>
+  <form method="post" action="/student/sites/{{ site.id }}/evidence" enctype="multipart/form-data" class="row g-2">
+    <div class="col-md-4"><input class="form-control" type="file" name="image" accept="image/*" /></div>
+    <div class="col-md-4"><input class="form-control" name="text_content" placeholder="文字证据" /></div>
+    <div class="col-md-3"><input class="form-control" name="note" placeholder="说明" /></div>
+    <div class="col-md-1"><button class="btn btn-primary w-100">提交</button></div>
+  </form>
+  <ul class="mt-2 mb-0">{% for e in evidences %}<li>{{ e.evidence_type }} - {{ e.note or e.text_content or e.file_url }}</li>{% else %}<li>暂无证据</li>{% endfor %}</ul>
+</div>
+{% endblock %}
